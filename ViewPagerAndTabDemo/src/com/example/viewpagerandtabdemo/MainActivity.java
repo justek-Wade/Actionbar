@@ -15,22 +15,22 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener, OnPageChangeListener{
 	/**
-	 * ����Tab��title
+	 * 顶部Tab的title
 	 */
 	private String [] mTabTitles;
 	
 	/**
-	 * ViewPager���������
+	 * ViewPager对象的引用
 	 */
 	private ViewPager mViewPager;
 	
 	/**
-	 * װ��Fragment�����������ǵ�ÿһ�����涼��һ��Fragment
+	 * 装载Fragment的容器，我们的每一个界面都是一个Fragment
 	 */
 	private List<Fragment> mFragmentList;
 	
 	/**
-	 * ActionBar���������
+	 * ActionBar对象的引用
 	 */
 	private ActionBar mActionBar;
 
@@ -39,29 +39,29 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//����Դ�ļ��ڻ�ȡTab��title
+		//从资源文件在获取Tab的title
 		mTabTitles = getResources().getStringArray(R.array.tab_title);
 		mFragmentList =  new ArrayList<Fragment>();
 		
 		mViewPager = (ViewPager) findViewById(R.id.viewPager);
-		//����Adapter
+		//设置Adapter
 		mViewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), mFragmentList));
-		//���ü���
+		//设置监听
 		mViewPager.setOnPageChangeListener(this);
 		
 		
-		//��ȡActionʵ������ʹ��getSupportActionBar()����
+		//获取Action实例我们使用getSupportActionBar()方法
 		mActionBar = getSupportActionBar();
 		
-//		//����Title
-//		mActionBar.setDisplayShowTitleEnabled(false);
-//		//����Home logo
-//		mActionBar.setDisplayShowHomeEnabled(false);
-		//����ActionBar�ĵ���ģʽΪTab
+		//隐藏Title
+		mActionBar.setDisplayShowTitleEnabled(false);
+		//隐藏Home logo
+		mActionBar.setDisplayShowHomeEnabled(false);
+		//设置ActionBar的导航模式为Tab
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		
-		//ΪActionBar���Tab������TabListener
+		//为ActionBar添加Tab并设置TabListener
 		for(int i=0; i<mTabTitles.length; i++){
 			 ActionBar.Tab tab = mActionBar.newTab();
 			 tab.setText(mTabTitles[i]);
@@ -70,7 +70,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 		}
 		
 		
-		//��Fragment���뵽List�У�����Tab��title���ݸ�Fragment
+		//将Fragment加入到List中，并将Tab的title传递给Fragment
 		for(int i=0; i<mTabTitles.length; i++){
 			Fragment fragment = new ItemFragment();
 			Bundle args = new Bundle();
@@ -86,7 +86,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		//���ActionBar Tab��ʱ���л���ͬ��Fragment����
+		//点击ActionBar Tab的时候切换不同的Fragment界面
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -113,7 +113,7 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 
 	@Override
 	public void onPageSelected(int arg0) {
-		//����ViewPager��ʱ���������Ӧ��ActionBar Tab��ѡ��
+		//滑动ViewPager的时候设置相对应的ActionBar Tab被选中
 		mActionBar.setSelectedNavigationItem(arg0);
 	}
 
