@@ -13,6 +13,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
+import fragment.PictureFragment;
+
 public class MainActivity extends SherlockFragmentActivity implements ActionBar.TabListener, OnPageChangeListener{
 	/**
 	 * 顶部Tab的title
@@ -71,14 +73,23 @@ public class MainActivity extends SherlockFragmentActivity implements ActionBar.
 		
 		
 		//将Fragment加入到List中，并将Tab的title传递给Fragment
-		for(int i=0; i<mTabTitles.length; i++){
+		/*for(int i=0; i<mTabTitles.length; i++){
 			Fragment fragment = new ItemFragment();
 			Bundle args = new Bundle();
 			args.putString("arg", mTabTitles[i]);
 			fragment.setArguments(args);
 			
 			mFragmentList.add(fragment);
-		}
+		}*/
+		Fragment picFragment=new PictureFragment();
+		mFragmentList.add(picFragment);
+		
+		Fragment fragment = new ItemFragment();
+		Bundle args = new Bundle();
+		args.putString("arg", mTabTitles[1]);
+		fragment.setArguments(args);
+		
+		mFragmentList.add(fragment);
 		
 	}
 	
