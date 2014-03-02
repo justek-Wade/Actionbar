@@ -7,7 +7,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import utils.PictureUtils;
+
 import android.app.ProgressDialog;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -25,7 +28,8 @@ import com.example.viewpagerandtabdemo.R;
 public class PictureFragment extends SherlockFragment {
 
 	private Button picturebtn;
-	private ImageView image;
+	private ImageView imageView;
+	private Bitmap bitmap;
 	private ProgressDialog progressDialog;
 	private String picUrl = "http://c.hiphotos.baidu.com/image/w%3D2048/sign=f236ae37347adab43dd01c43bfecb21c/503d269759ee3d6d5fd49ad441166d224f4ade9a.jpg";
 
@@ -41,11 +45,18 @@ public class PictureFragment extends SherlockFragment {
 		picturebtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new DownloadPicture().execute(picUrl);
+				if (bitmap == null) {
+					new DownloadPicture().execute(picUrl);
+				} else {
+					imageView.setImageBitmap(bitmap);
+				}
 			}
 		});
-		image = (ImageView) contextView.findViewById(R.id.image);
-		image.setImageResource(R.drawable.shendun);
+		imageView = (ImageView) contextView.findViewById(R.id.image);
+		// imageView.setImageResource(R.drawable.shendun);
+		imageView.setImageBitmap(PictureUtils.getInstance()
+				.decodeSampledBitmapFromResource(getResources(),
+						R.drawable.shendun, 100, 100));
 		return contextView;
 	}
 
@@ -58,20 +69,8 @@ public class PictureFragment extends SherlockFragment {
 
 		@Override
 		protected Bitmap doInBackground(String... params) {
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(params[0]);
-			Bitmap bitmap = null;
-			try {
-				HttpResponse httpResponse = httpClient.execute(httpGet);
-				if (httpResponse.getStatusLine().getStatusCode() == 200) {
-					HttpEntity httpEntity = httpResponse.getEntity();
-					byte[] data = EntityUtils.toByteArray(httpEntity);
-					bitmap = BitmapFactory
-							.decodeByteArray(data, 0, data.length);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			// Bitmap bitmap = null;
+			bitmap = downLoadPictureFromURL(bitmap, params[0]);
 			return bitmap;
 		}
 
@@ -80,8 +79,24 @@ public class PictureFragment extends SherlockFragment {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			progressDialog.dismiss();
-			image.setImageBitmap(result);
+			imageView.setImageBitmap(result);
 		}
+	}
+
+	private Bitmap downLoadPictureFromURL(Bitmap bitmap, String url) {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse httpResponse = httpClient.execute(httpGet);
+			if (httpResponse.getStatusLine().getStatusCode() == 200) {
+				HttpEntity httpEntity = httpResponse.getEntity();
+				byte[] data = EntityUtils.toByteArray(httpEntity);
+				bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bitmap;
 	}
 
 }
