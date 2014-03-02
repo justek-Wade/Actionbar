@@ -4,14 +4,14 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class pictureUtils {
+public class PictureUtils {
 
-	private static pictureUtils instance;
+	private static PictureUtils instance;
 
-	public static pictureUtils getInstance() {
+	public static PictureUtils getInstance() {
 		if(instance==null)
 		{
-			instance=new pictureUtils();
+			instance=new PictureUtils();
 		}
 		return instance;
 	}
